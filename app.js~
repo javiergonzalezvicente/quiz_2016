@@ -45,18 +45,20 @@ app.use(function(req, res, next) {
 app.use( function (req, res, next){
 	var fecha = new Date();
 	if(req.session && req.session.user){
-	
+	console.log('Existe sesion y ha entrado en MW autoload');
 	var ultimaFecha = req.session.user.expires;
 	var valorFecha = fecha.valueOf();
-	
+	console.log('Hora en milisegundos:' + valorFecha);
 	var diferencia = valorFecha - ultimaFecha;
-	
+	console.log('El valor del time de la sesion es:' + req.session.user.expires);
+	console.log('El valor del time al entrar es:' + fecha);
+	console.log('El valor diferencia es:' + diferencia);
 	if(diferencia > 12000){
-	
+	console.log('Se ha pasado el timeOut');
 	delete req.session.user;
 	res.redirect("/session");
 	} else {
-	
+	console.log('Actualizar variable expires');
 	var nuevaFecha = new Date();
 	req.session.user.expires = nuevaFecha.valueOf();
 	next();
