@@ -39,9 +39,19 @@ exports.index = function(req, res, next) {
 	var search = req.query.search || "";	
 	models.Quiz.findAll({where: {question: {$like: "%"+search+"%"}}})
 		.then(function(quizzes) {
+			// Compruebo el formato 
+		if ((!req.params.format) || (req.params.formart === "html")){
 			if(quizzes){
 			res.render('quizzes/index.ejs', { quizzes: quizzes, title:'Lista Preguntas'});
-		}else{ throw new Error('No existe este quiz en la BBDD');}
+			} else {throw new Error('No existe este quiz en la BBDD');}
+		}
+		else if (req.params.format ==="json") {
+			res.send(JSON.stringify(quizzes));
+		}
+		
+		else {
+			throw new Error('Formato no valido=' + req.params.format);
+		}
 		})
 		.catch(function(error) {
 			next(error);
@@ -53,9 +63,19 @@ exports.index = function(req, res, next) {
 exports.show = function(req, res, next) {
 
 	var answer = req.query.answer || '';
+	if ((!req.params.format) || (req.params.format === "html")){
+	
 
-	res.render('quizzes/show', {quiz: req.quiz,
-								answer: answer});
+	res.render('quizzes/show', {quiz: req.quiz,answer: answer});
+
+	}
+	else if (req.params.format === 'json') {
+		res.send(JSON.stringify(quizzes));
+	}
+	else{
+	next(new Error('Formato no valido=' + req.params.format));
+	}
+								
 };
 
 
