@@ -33,7 +33,7 @@
            <li> <%= comment.text %> </li>
 		<% if (comment.AuthorId) { %>
 			Realizado por: <%= comment.Author.username %>
-		<% } %>
+		<% } >
 
            <a href="/quizzes/<%= quiz.id %>/comments/<%= comment.id %>/accept?_method=PUT">
               <button>Aceptar</button>
